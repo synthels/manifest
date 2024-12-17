@@ -12,7 +12,7 @@ def from_git(package, clone_at):
   else:
       repo = ("--depth", "1", package["git"])
 
-  command = ["git", "clone", f"{clone_at}/{package['name']}"]
+  command = ["git", "clone", *repo, f"{clone_at}/{package['name']}"]
   if "recursive" in package:
     command.append("--recursive")
 
