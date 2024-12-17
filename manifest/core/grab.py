@@ -1,6 +1,6 @@
 import os
 import subprocess
-import urllib.request
+import urllib.request, urllib.error
 import tarfile
 
 from . import log
@@ -33,7 +33,12 @@ def from_ftp(package, clone_at):
   cloned_at = f"{clone_at}/{package['name']}"
   if not os.path.isdir(clone_at):
     os.makedirs(clone_at)
-  urllib.request.urlretrieve(package["ftp"], f"{cloned_at}.tar.gz")
+
+  try:
+    urllib.request.urlretrieve(package["ftp"], f"{cloned_at}.tar.gz")
+  except urllib.error.URLError:
+    log.error(f"couldn't resolve {package['ftp']}.")
+    exit(1)
 
   # we assume (WLOG) that the file is a tarball
   tar = tarfile.open(f"{cloned_at}.tar.gz", "r:gz")

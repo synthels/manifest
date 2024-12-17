@@ -27,7 +27,6 @@ def install_package(package, opt):
       # where the installed package resides
       cwd = os.getcwd()
       build_dir = util.get_package_directory(package, opt)
-      log.info(f"BUILDDIR: {build_dir}")
       package["build_dir"] = build_dir
       if "separate" in package:
         if package["separate"]:
