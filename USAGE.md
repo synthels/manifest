@@ -63,6 +63,7 @@ The options for each package are as follows:
 - `ftp`: If the source is hosted on an FTP server, this field specifies the URL to the source.
 - `tag`: If the `git` field was specified, this field specifies the tag which will be cloned.
 - `clone-at`: Where the source will be cloned (applies both to `git` and `ftp`).
+- `recursive`: If `git` is set, clones recursively.
 - `separate`: If set, the package's source and build directories will be separate.
 
 ## Dependencies

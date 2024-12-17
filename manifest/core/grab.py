@@ -11,8 +11,13 @@ def from_git(package, clone_at):
         f"{package['git']}")
   else:
       repo = ("--depth", "1", package["git"])
+
+  command = ["git", "clone", "f"{clone_at}/{package['name']}"]
+  if "recursive" in package:
+    command.append("--recursive")
+
   p = subprocess.run(
-    ["git", "clone", *repo, f"{clone_at}/{package['name']}"],
+    command,
     stdout=subprocess.DEVNULL,
     stderr=subprocess.DEVNULL)
 
