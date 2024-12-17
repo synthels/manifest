@@ -86,7 +86,6 @@ def main():
   log.bold(f"manifest v{__version__}")
   try:
     with open("packages.yml", "r") as f:
-      # get build options from yaml
       try:
         y = yaml.safe_load(f)
         require(requirements)
@@ -95,7 +94,7 @@ def main():
         if "packages" not in y:
           log.error("no packages found in packages.yml.")
         for key, val in y.items():
-          # install packages
+          # actually install packages
           if key == "packages":
             install.install_packages(val, args, build_options)
       except yaml.YAMLError as exc:

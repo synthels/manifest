@@ -20,7 +20,7 @@ def install_package(package, opt):
       stages = {
         "configure": "configuring",
         "compile": "compiling",
-        "install": "installing"
+        "install": "fetching"
       }
 
       # we change our directory to the directory

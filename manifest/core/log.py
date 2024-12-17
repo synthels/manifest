@@ -1,7 +1,7 @@
 from colored import fg, attr
 
-def installing(name):
-  print(f"installing {fg('green')}{name}{attr('reset')}...")
+def fetching(name):
+  print(f"fetching {fg('green')}{name}{attr('reset')}...")
 
 def skipping(name):
   print(

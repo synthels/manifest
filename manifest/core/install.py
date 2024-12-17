@@ -6,7 +6,7 @@ import urllib.request
 
 from colored import fg, attr
 
-from . import grab, log, build, patch, util
+from . import fetch, log, build, patch, util
 from .dependencies import DependencyGraph
 
 known_options = [
@@ -85,8 +85,8 @@ def install_packages(packages, args, opt):
         for package in order:
           name = package["name"]
           if name not in already_installed:
-            log.installing(name)
-            grab.get_source(package, opt)
+            log.fetching(name)
+            fetch.get_source(package, opt)
             # patch package
             if opt["patches"] != None:
               patch.patch_package(package, opt)
