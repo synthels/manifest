@@ -16,3 +16,5 @@ def patch_package(package, opt):
       util.execute_command(
         package, ["patch", "-p0", "<", f"{patches}/{patch}"], opt)
       os.chdir(cwd)
+  else:
+    log.info(f"no patches found for {package['name']}, skipping.")
