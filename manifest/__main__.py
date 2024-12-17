@@ -28,6 +28,27 @@ def require(req):
         f"{r} is required for manifest to function."
       )
 
+def is_null_list(x):
+  if type(x) is list:
+    return x == [None] * len(x)
+  return False
+
+def check_any_empty(x):
+  """
+  check whether
+  a yaml contains any null entries.
+  """
+  if type(x) is dict:
+    for key in x:
+      a = x[key]
+      if a is None or is_null_list(a):
+        log.error(f"option \"{key}\" is empty.")
+        exit(1)
+      check_any_empty(a)
+  elif type(x) is list:
+    for a in x:
+      check_any_empty(a)
+
 def parse_sysroot(opt):
   if opt is None:
     log.error("no directories found under sysroot")
@@ -89,6 +110,7 @@ def main():
       try:
         y = yaml.safe_load(f)
         require(requirements)
+        check_any_empty(y)
         build_options = get_build_options(y)
         configure_working_directory(build_options)
         if "packages" not in y:
