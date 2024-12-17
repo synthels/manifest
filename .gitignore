@@ -154,6 +154,6 @@ dmypy.json
 cython_debug/
 
 # manifest specific things
-*.yml
+packages.yml
 patches
 .manifest
