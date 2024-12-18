@@ -26,7 +26,7 @@ def ordinal(n):
 
 def check_package(p):
   for opt in p.keys():
-    if opt not in known_options:
+    if (opt not in known_options) and (opt != "build"):
       return False
   return (("name" in p) and (("git" in p) ^ ("ftp" in p)))
 
