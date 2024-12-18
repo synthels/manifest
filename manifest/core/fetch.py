@@ -65,6 +65,9 @@ def get_source(package, opt):
   clone_at = opt['working-dir']
   if "clone-at" in package:
     clone_at = f"{clone_at}/{package['clone-at']}"
+  else:
+    log.error(f"don't know where to clone package {package['name']}.")
+    exit(1)
 
   if os.path.isdir(f"{clone_at}/{package['name']}"):
     log.error(f"the previous build probably failed and you're running it again; please delete the build directory first.")

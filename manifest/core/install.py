@@ -25,6 +25,10 @@ def ordinal(n):
                                   (n % 10 < 4) * n % 10::4])
 
 def check_package(p):
+  if type(p) is not dict:
+    log.error("packages.yml in invalid.")
+    exit(1)
+
   for opt in p.keys():
     if (opt not in known_options) and (opt != "build"):
       return False
@@ -44,12 +48,12 @@ def install_packages(packages, args, opt):
     if not check_package(package):
       try:
         log.error(
-            f'couldn\'t parse package "{package["name"]}".'
+            f"couldn't parse package {package['name']}."
         )
       # hack to catch unnamed packages early
       except KeyError:
           log.error(
-            f'{ordinal(i+1)} package has no name!'
+            f"{ordinal(i+1)} package has no name."
           )
       return
 
