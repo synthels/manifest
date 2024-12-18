@@ -7,10 +7,10 @@ from . import log
 
 def from_git(package, clone_at):
   if "tag" in package:
-      repo = ("--depth", "1", "--branch", f"{package['tag']}",
-        f"{package['git']}")
+    repo = ("--depth", "1", "--branch", f"{package['tag']}",
+      f"{package['git']}")
   else:
-      repo = ("--depth", "1", package["git"])
+    repo = ("--depth", "1", package["git"])
 
   command = ["git", "clone", *repo, f"{clone_at}/{package['name']}"]
   if "recursive" in package:
@@ -35,21 +35,31 @@ def from_ftp(package, clone_at):
     os.makedirs(clone_at)
 
   try:
-    urllib.request.urlretrieve(package["ftp"], f"{cloned_at}.tar.gz")
+    urllib.request.urlretrieve(package["ftp"], cloned_at)
+  except urllib.error.HTTPError:
+    log.error(f"couldn't resolve url {package['ftp']}.")
+    exit(1)
   except urllib.error.URLError:
-    log.error(f"couldn't resolve {package['ftp']}.")
+    log.error(f"invalid url {package['ftp']}.")
     exit(1)
 
-  # we assume (WLOG) that the file is a tarball
-  tar = tarfile.open(f"{cloned_at}.tar.gz", "r:gz")
-  tar.extractall(path=clone_at)
-  extracted = os.path.commonprefix(tar.getnames())
-  tar.close()
+  try:
+    f = tarfile.open(cloned_at, 'r:gz')
+  except tarfile.ReadError:
+    # probably an xz file
+    try:
+      f = tarfile.open(cloned_at, 'r:xz')
+    except tarfile.ReadError:
+      log.error(f"cannot extract file from {package['ftp']}.")
+      exit(1)
 
   # remove tar file and rename extracted archive to package name
-  os.remove(f"{cloned_at}.tar.gz")
-  os.rename(f"{clone_at}/{extracted}", f"{clone_at}/{package['name']}")
+  f.extractall(path=clone_at)
+  extracted = os.path.commonprefix(f.getnames())
+  f.close()
 
+  os.remove(cloned_at)
+  os.rename(f"{clone_at}/{extracted}", f"{clone_at}/{package['name']}")
 
 def get_source(package, opt):
   clone_at = opt['working-dir']
