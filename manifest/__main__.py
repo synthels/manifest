@@ -13,11 +13,11 @@ import shutil
 import yaml
 import pathlib
 
+from importlib.metadata import version
+
 from docopt import docopt
 
 from manifest.core import install, log, util
-
-__version__ = "1.0.0"
 
 requirements = ["git", "make", "patch"]
 
@@ -104,7 +104,7 @@ def configure_working_directory(opt):
 
 def main():
   args = docopt(__doc__)
-  log.bold(f"manifest v{__version__}")
+  log.bold(f"manifest v{version('manifest')}")
   try:
     with open("packages.yml", "r") as f:
       try:
