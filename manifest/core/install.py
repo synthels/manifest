@@ -48,13 +48,14 @@ def install_packages(packages, args, opt):
     if not check_package(package):
       try:
         log.error(
-            f"couldn't parse package {package['name']}."
+          f"couldn't parse package {package['name']}."
         )
       # hack to catch unnamed packages early
       except KeyError:
-          log.error(
-            f"{ordinal(i+1)} package has no name."
-          )
+        log.error(
+          f"{ordinal(i+1)} package has no name."
+        )
+        exit(1)
       return
 
     # while we're at it, we save the package's source directory

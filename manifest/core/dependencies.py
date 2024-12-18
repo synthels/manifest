@@ -12,9 +12,20 @@ class DependencyGraph:
     self.packages = packages
     self.check_dependencies()
 
+  def get_by_name(self, name):
+    for _n, p in self.packages.items():
+      # no reason to check if name field exists
+      # at this point.
+      if p["name"] == name:
+        return p
+    return None
+
   def check_dependencies(self):
     for _n, package in self.packages.items():
       if "dependencies" in package:
+        # check for any cross dependencies
+        # that would kill us.
+        self.check_cross(package)
         for dep in package["dependencies"]:
           if dep not in self.packages:
             log.error(
@@ -24,6 +35,14 @@ class DependencyGraph:
           if package["name"] == dep:
             log.error(f"{dep} depends on itself.")
             exit(1)
+
+  def check_cross(self, package):
+    for d in package["dependencies"]:
+      other_package = self.get_by_name(d)
+      if "dependencies" in other_package:
+        if package["name"] in other_package["dependencies"]:
+          log.error(f"{package['name']} and {other_package['name']} depend on eachother.")
+          exit(1)
 
   def resolve_single(self, package):
     for name, dep in self.packages.items():
