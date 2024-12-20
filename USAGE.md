@@ -1,41 +1,40 @@
 # Usage
 
-A typical use case for `manifest` is installing a bunch of packages and building them from source, all with one command. These packages are described in a file named `packages.yml`, which must always exist in the root directory where you're calling `manifest` from.
-
-The header of the file is where you specify basic build options
+Create a file named `packages.yml` in the root directory
+of your project. Let it begin like so:
 
 ```yaml
 build:
-  sysroot: "sysroot"
-  working-dir: "working_dir"
-  prefix: "prefix"
-  patches: "patches_dir"
+  sysroot: sysroot
+  working-dir: working
+  prefix: prefix
+  patches: patches
 ```
 
-## Sysroot
+## sysroot
 
-You can specify a sysroot in two ways. For one, you can just specify a directory path like this:
+For builds requiring a sysroot (gcc for example), you can define one using
 
 ```yaml
-sysroot: "path/to/sysroot"
+sysroot: path/to/sysroot
 ```
 
-This will work just fine and the sysroot will be created if it doesn't already exist. If you want to specify multiple nested subdirectories within the sysroot, you can also pass a list of paths.
+This will work just fine and the sysroot will be created if it doesn't already exist. If you wan multiple nested subdirectories within the sysroot, you can also pass a list of paths.
 
 ```yaml
 sysroot:
-  - "path/to/sysroot"
-  - "subdir1/subdir1"
-  - "subdir2/subdir2/subdir3"
+  - path/to/sysroot
+  - subdir1/subdir1
+  - subdir2/subdir2/subdir3
 ```
 
-In this case, the first path in the list will be treated as the sysroot (the value of `%SYSROOT`, see [Special variables](#Special-variables)) and every other directory will be created relative to this one.
+In this case, the first path in the list will be treated as the sysroot and every other directory will be created relative to this one.
 
 ## The other header options
 
-- The `working-dir` field specifies the directory where all of the built packages and their sources will go.
-- The `prefix` field specifies the directory relative to `working-dir`, where the built binaries will be installed.
-- The `patches` field specifies the directory relative to `working-dir`, where patches for each package can be found. Patches for each package are expected to be laid out under directories of the form `<patches>/package_name`.
+- `working-dir` is the directory where all of the built packages and their sources will go.
+- `prefix` is the directory relative to `working-dir`, where your binaries will be installed.
+- The `patches` is the directory relative to `working-dir`, where patches for each package can be found. Patches for each package are expected to be laid out under directories of the form `<patches>/package_name`.
 
 The default values for these fields are as follows:
 ```py
@@ -49,7 +48,7 @@ The default values for these fields are as follows:
 
 ## Packages
 
-Under the `build` header is where you specify the packages you would like to be installed, like this:
+Under the `build` header is where you lay out your packages.
 
 ```yaml
 packages:
@@ -60,15 +59,15 @@ packages:
 The options for each package are as follows:
 
 - `git`: If the source is hosted on a git repository, this field specifies the URL to that repository.
-- `ftp`: If the source is hosted on an FTP server, this field specifies the URL to the source.
-- `tag`: If the `git` field was specified, this field specifies the tag which will be cloned.
+- `ftp`: If the source is hosted on an FTP server, this field specifies the URL to the source. (Extepcted to be a `gz` or `xz` file).
+- `tag`: If `git` is set, this is the tag which will be cloned.
 - `clone-at`: Where the source will be cloned (applies both to `git` and `ftp`).
-- `recursive`: If `git` is set, clones recursively.
-- `separate`: If set, the package's source and build directories will be separate.
+- `recursive`: If `git` is set, clones submodules.
+- `separate`: If set, the package's source and build directories will be separated.
 
 ## Dependencies
 
-You can also specify a set of dependencies for each package, guaranteeing that the specified dependencies will be built before this package.
+Under any one package, you may list a number of other packages which must be built and available for this one. You do this, as expected, like so:
 
 ```yaml
 dependencies:
@@ -92,9 +91,8 @@ build:
     - ['make', 'install']
 ```
 
-In every command that is ran, you can expect that the current directory will be set to wherever the current package's source was installed (unless the `separate` option was set, in which case the current directory will be set to the package's build directory). In these commands, you can also use a set of special variables, which you will prefix with `%`.
+In every command that is ran, you can expect that the current directory will be set to wherever the current package's source was installed (unless the `separate` option was set, in which case the current directory will be set to the package's build directory). In these commands, you can also use a set of special variables, which you prefix with `%`. These variables are the following.
 
-### Special variables
 - `%CORES`: Number of CPU cores available in the system.
 - `%PREFIX`: The prefix set in the header.
 - `%SYSROOT`: The sysroot set in the header.
