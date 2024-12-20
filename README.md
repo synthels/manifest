@@ -24,10 +24,10 @@ $ python3 -m manifest
 
 ```yaml
 build:
-  sysroot: "sysroot"
-  working-dir: "working_dir"
-  prefix: "prefix"
-  patches: "patches_dir"
+  sysroot: sysroot
+  working-dir: working_dir
+  prefix: prefix
+  patches: patches_dir
 
 packages:
   # ...

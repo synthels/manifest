@@ -33,8 +33,8 @@ In this case, the first path in the list will be treated as the sysroot and ever
 ## The other header options
 
 - `working-dir` is the directory where all of the built packages and their sources will go.
-- `prefix` is the directory relative to `working-dir`, where your binaries will be installed.
-- The `patches` is the directory relative to `working-dir`, where patches for each package can be found. Patches for each package are expected to be laid out under directories of the form `<patches>/package_name`.
+- `prefix` is the directory relative to `working-dir` where your binaries will be installed.
+- `patches` is the directory relative to `working-dir` where patches for each package can be found. Patches for each package are expected to be laid out under directories of the form `<patches>/package_name`.
 
 The default values for these fields are as follows:
 ```py
