@@ -19,7 +19,7 @@ For builds requiring a sysroot (gcc for example), you can define one using
 sysroot: path/to/sysroot
 ```
 
-This will work just fine and the sysroot will be created if it doesn't already exist. If you wan multiple nested subdirectories within the sysroot, you can also pass a list of paths.
+This will work just fine and the sysroot will be created if it doesn't already exist. If you need multiple nested subdirectories within the sysroot, you can also pass a list of paths.
 
 ```yaml
 sysroot:
